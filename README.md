@@ -10,10 +10,6 @@ A web application for managing events, booking tickets, generating unique ticket
 - [x] Set up authentication with JWT
 - [ ] Implement role based access
 
-### Frontend Setup
-- [ ] Create an Angular/React project.
-- [ ] Install libraries (e.g., Angular Material or Bootstrap for UI, HttpClient for API calls).
-
 ## Database Schema
 
 ### Create Database Tables
@@ -33,8 +29,8 @@ A web application for managing events, booking tickets, generating unique ticket
 ## Backend Development
 
 ### User Management
-- [ ] Build user registration and login endpoints.
-- [ ] Secure endpoints with JWT or session-based authentication.
+- [x] Build user registration and login endpoints.
+- [x] Secure endpoints with JWT or session-based authentication.
 
 ### Event Management
 - [ ] Implement CRUD operations for events (restricted to Admins).
