@@ -8,9 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hcodes.eventus.entity.UserEntity;
 import com.hcodes.eventus.repository.UserRepository;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class AuthenticationTest {
 
     @Autowired
@@ -31,6 +34,9 @@ public class AuthenticationTest {
 
     @BeforeEach
     void setUp() {
+
+        userRepository.deleteByUsername("testUser");
+
         // Ensure user exists in DB
         UserEntity existingUser = userRepository.findByEmail("hcodes3@example.com");
         if (existingUser == null) {
@@ -67,6 +73,35 @@ public class AuthenticationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void shouldRegisterNewUser() throws Exception {
+        String json = "{\"username\": \"testUser2\", \"password\": \"password4\", \"email\": \"test2@test.com\", \"firstName\": \"Test\", \"lastName\": \"User\"}";
+
+        mockMvc.perform(post("/api/auth/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldNotRegisterExistingUser() throws Exception {
+        String json = "{\"username\": \"testUser\", \"password\": \"password4\", \"email\": \"test3@test.com\", \"firstName\": \"Test\", \"lastName\": \"User\"}";
+
+        // First, register the user
+        mockMvc.perform(post("/api/auth/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // Then, try to register again
+        mockMvc.perform(post("/api/auth/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
   
