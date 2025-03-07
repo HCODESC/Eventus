@@ -19,4 +19,8 @@ public class LoginDto {
     public String Password; 
     public String email; 
 
+    public LoginDto(String username, String Password) {
+        this.username = username;
+        this.Password = Password;
+    }
 }

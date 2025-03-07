@@ -1,6 +1,5 @@
 package com.hcodes.eventus.config;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
